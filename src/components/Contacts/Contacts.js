@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Snackbar, IconButton, SnackbarContent } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import axios from 'axios';
 import isEmail from 'validator/lib/isEmail';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -39,6 +38,27 @@ function Contacts() {
     const [errMsg, setErrMsg] = useState('');
 
     const { theme } = useContext(ThemeContext);
+
+    // The hidden form that is actually POSTed to Google, and a flag so the
+    // iframe's onLoad is only treated as a result when it follows a submit.
+    // (An iframe fires onLoad once on mount, which is not a submission.)
+    const formRef = useRef(null);
+    const submittedRef = useRef(false);
+
+    const handleIframeLoad = () => {
+        if (!submittedRef.current) {
+            return;
+        }
+        submittedRef.current = false;
+
+        setSuccess(true);
+        setErrMsg('');
+
+        setName('');
+        setEmail('');
+        setMessage('');
+        setOpen(false);
+    };
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -130,27 +150,13 @@ function Contacts() {
 
     const classes = useStyles();
 
-    const handleContactForm = (e) => {
+       const handleContactForm = (e) => {
         e.preventDefault();
 
         if (name && email && message) {
             if (isEmail(email)) {
-                const responseData = {
-                    name: name,
-                    email: email,
-                    message: message,
-                };
-
-                axios.post(contactsData.sheetAPI, responseData).then((res) => {
-                    console.log('success');
-                    setSuccess(true);
-                    setErrMsg('');
-
-                    setName('');
-                    setEmail('');
-                    setMessage('');
-                    setOpen(false);
-                });
+                submittedRef.current = true;
+                formRef.current.submit();
             } else {
                 setErrMsg('Invalid email');
                 setOpen(true);
@@ -181,6 +187,48 @@ function Contacts() {
                     style={{ backgroundColor: theme.primary }}
                 ></div>
             </div>
+            {/*
+                Google Forms rejects cross-origin fetch() POSTs and, in
+                no-cors mode, returns an opaque response the page cannot
+                read — so success could never be detected. Submitting a real
+                form into a hidden iframe is an ordinary browser navigation,
+                which is not subject to CORS at all. The iframe's onLoad is
+                the completion signal.
+            */}
+            <iframe
+                name='hidden_iframe'
+                style={{ display: 'none' }}
+                title='hidden'
+                onLoad={handleIframeLoad}
+            />
+            <form
+                ref={formRef}
+                action={contactsData.sheetAPI}
+                method='POST'
+                target='hidden_iframe'
+                style={{ display: 'none' }}
+                aria-hidden='true'
+            >
+                <input
+                    type='hidden'
+                    name='entry.2005620554'
+                    value={name}
+                    readOnly
+                />
+                <input
+                    type='hidden'
+                    name='entry.1045781291'
+                    value={email}
+                    readOnly
+                />
+                <input
+                    type='hidden'
+                    name='entry.839337160'
+                    value={message}
+                    readOnly
+                />
+            </form>
+
             <div className='contacts--container'>
                 <h1 style={{ color: theme.primary }}>Contacts</h1>
                 <div className='contacts-body'>
