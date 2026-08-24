@@ -18,7 +18,7 @@ function App() {
 
   return (
     <div className="app">
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <ScrollToTop/>
         <Switch>
           <Route path="/" exact component={Main} />
