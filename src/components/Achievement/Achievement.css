@@ -108,7 +108,7 @@
     width: 23%;
 }
 
-.achievecard-imgcontainer > img {
+.achievecard-imgcontainer img {
     width: 150px;
     height: 130px;
     border-radius: 10px;
@@ -204,7 +204,7 @@
        justify-content: center;
     }
 
-    .achievecard-imgcontainer > img {
+    .achievecard-imgcontainer img {
         width: 80px;
         height: 70px;
     }
@@ -229,10 +229,63 @@
     .achievecard-details1 p {
         font-size: 0.95rem;
     }
-    .achievecard-imgcontainer > img {
+    .achievecard-imgcontainer img {
         width: 70px;
         height: 60px;
     }
 
 }
 
+
+
+/* Certificate link on the card image — only rendered when `demo` is set,
+   so the card is visually identical to before when there is no link. */
+
+.achievecard-certLink {
+    display: block;
+    line-height: 0;
+    max-width: 100%;
+    cursor: pointer;
+    transition: transform 200ms ease-in-out;
+}
+
+.achievecard-certLink:hover {
+    transform: scale(1.05);
+}
+
+
+/* Matches the Projects section's "View All" affordance. */
+
+.achievement--viewAll {
+    width: 100%;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.achievement--viewAll a button {
+    outline: none;
+    border: none;
+    width: 150px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: inherit;
+    border-radius: 45px;
+    font-size: 1.05rem;
+    font-family: var(--primaryFont);
+    font-weight: 500;
+    padding-left: 1.5rem;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 992px) {
+    .achievement--viewAll {
+        justify-content: center;
+        padding: 0;
+        margin-top: 1.5rem;
+    }
+}

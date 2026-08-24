@@ -31,6 +31,24 @@ export const projectsData = [
         demo: 'https://github.com/IBM-19/Huge-Integer_Fraction',
         image: three
     },
+    {
+        id: 4,
+        projectName: 'Airline Management System',
+        projectDesc: 'An object-oriented system for managing airline operations, bookings, and scheduling.',
+        tags: ['C++', 'OOP'],
+        code: '',
+        demo: '',
+        image: ''
+    },
+    {
+        id: 5,
+        projectName: 'Agricultural Database System',
+        projectDesc: 'SQL database design for managing agricultural data at scale.',
+        tags: ['SQL'],
+        code: '',
+        demo: '',
+        image: ''
+    },
 ]
 
 

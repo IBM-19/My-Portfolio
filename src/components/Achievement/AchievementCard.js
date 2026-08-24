@@ -8,7 +8,7 @@ import { AiOutlineFolder } from "react-icons/ai";
 
 import './Achievement.css'
 
-function AchievementCard({id, title, details, date, field, image}) {
+function AchievementCard({id, title, details, date, field, image, demo}) {
 
     const { theme } = useContext(ThemeContext);
 
@@ -39,7 +39,19 @@ function AchievementCard({id, title, details, date, field, image}) {
                     </div>
                 </div> 
                 <div className="achievecard-imgcontainer">
-                    <img src={image} alt="" />
+                    {demo ? (
+                        <a
+                            href={demo}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="achievecard-certLink"
+                            aria-label={`View ${title} certificate`}
+                        >
+                            <img src={image} alt="" />
+                        </a>
+                    ) : (
+                        <img src={image} alt="" />
+                    )}
                 </div>
            </div>
         </Fade>
